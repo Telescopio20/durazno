@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Para ti</title>
+    <style>
+        body { margin: 0; background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        canvas { filter: blur(0.5px) contrast(1.2); }
+        .mensaje { 
+            position: absolute; 
+            bottom: 40px; 
+            color: #ffaa33; 
+            font-size: 1.5rem; 
+            text-align: center; 
+            text-shadow: 0 0 10px rgba(255, 170, 51, 0.5);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="mensaje">Sé que no es una flor física, pero quiero que sepas que tú también eres importante para mí. tqm<3</div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let t = 0;
+        
+        function dibujar() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            const k = 5 + Math.sin(t * 0.2) * 2; 
+            const a = 150 + Math.sin(t * 0.5) * 50; 
+            
+            ctx.beginPath();
+            
+            // Lógica de color: Oscila suavemente entre rojo, naranja y amarillo (0 a 60 grados en HSL)
+            const hue = 30 + Math.sin(t * 0.5) * 30; 
+            ctx.strokeStyle = `hsla(${hue}, 90%, 60%, 0.8)`;
+            ctx.lineWidth = 1.5;
+
+            for (let theta = 0; theta < Math.PI * 2 * 10; theta += 0.02) {
+                let r = a * Math.sin(k * theta);
+                let x = centerX + r * Math.cos(theta) * Math.cos(t * 0.1);
+                let y = centerY + r * Math.sin(theta) * Math.sin(t * 0.1);
+                
+                if (theta === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            
+            ctx.stroke();
+            t += 0.01;
+            requestAnimationFrame(dibujar);
+        }
+        dibujar();
+    </script>
+</body>
+</html>
